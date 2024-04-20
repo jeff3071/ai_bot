@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "ai-bot"
+version = "0.1.0"
+description = ""
+authors = ["jeff3071 <jeff563715@gmail.com>"]
+readme = "README.md"
+packages = [{include = "ai_bot"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+langchain = "^0.1.13"
+faiss-gpu = "^1.7.2"
+pymupdf = "^1.24.0"
+tqdm = "^4.66.2"
+sentence-transformers = "^2.6.1"
+markdown = "^3.6"
+rank-bm25 = "^0.2.2"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
