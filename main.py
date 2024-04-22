@@ -12,6 +12,8 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 
+from exp import get_questions, write_ans
+
 load_dotenv()
 
 
@@ -50,13 +52,13 @@ def parse_answer(answer):
 def main():
     permanent_db_path = "faiss_index"
     embeddings = OllamaEmbeddings(model="qwen:4b")
-    if os.path.exists(permanent_db_path):
-        vectorstore = FAISS.load_local(permanent_db_path, embeddings)
-    else:
-        docs = load_docs(folder_path="./testdata")
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50, add_start_index=True)
-        all_splits = text_splitter.split_documents(docs)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50, add_start_index=True)
+    docs = load_docs(folder_path="./testdata")
+    all_splits = text_splitter.split_documents(docs)
 
+    if os.path.exists(permanent_db_path):
+        vectorstore = FAISS.load_local(permanent_db_path, embeddings, allow_dangerous_deserialization=True)
+    else:
         vectorstore = FAISS.from_documents(all_splits, embeddings)
 
     bm25_retriever = BM25Retriever.from_documents(all_splits)
@@ -67,10 +69,19 @@ def main():
 
     chain = get_chain(ensemble_retriever)
 
-    input_text = input(">>> ")
-    while input_text.lower() != "bye":
-        parse_answer(chain.invoke(input_text))
-        input_text = input(">>> ")
+    questions = get_questions()
+    exp_ans = []
+
+    for i, question in enumerate(questions):
+        rag_ans = chain.invoke(question[1])["answer"]
+        exp_ans.append(questions[i] + [rag_ans])
+
+    write_ans(exp_ans)
+
+    # input_text = input(">>> ")
+    # while input_text.lower() != "bye":
+    #     parse_answer(chain.invoke(input_text))
+    #     input_text = input(">>> ")
     vectorstore.save_local(permanent_db_path)
 
 

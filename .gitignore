@@ -1,3 +1,5 @@
 .env
 testdata/
 faiss_index/
+docs/
+exp/

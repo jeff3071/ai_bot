@@ -21,6 +21,7 @@ LANGCHAIN_API_KEY=<LANGCHAIN_API_KEY>
 
 Create `testdata` directory in the root directory and add files.
 
+> Now we support only `.md` files.
 
 ## Usage
 
