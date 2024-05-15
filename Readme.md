@@ -9,19 +9,20 @@ poetry init
 poetry install
 ```
 
-Create a `.env` file in the root directory and add the following environment variables:
+
+Create `testdata` directory in the root directory and add files.
+
+> Now we only support `.md` files.
+
+
+(Optional) Create a `.env` file in the root directory and add the following environment variables:
 
 ```bash
 LANGCHAIN_TRACING_V2=true
 LANGCHAIN_API_KEY=<LANGCHAIN_API_KEY>
 ```
-
 > Note: You can get the `LANGCHAIN_API_KEY` from [LangSmith](https://www.langchain.com/langsmith).
 
-
-Create `testdata` directory in the root directory and add files.
-
-> Now we support only `.md` files.
 
 ## Usage
 
@@ -29,9 +30,11 @@ Run ollama:
 ```bash
 ollama serve
 ```
+> Default embedding model is `chevalblanc/acge_text_embedding` and default language model is `qwen:4b`.
 
 Open a new terminal and run the following command:
 ```bash
+cd src
 python main.py
 ```
 
